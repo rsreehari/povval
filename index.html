@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasaragod Explorer Pro - Tourism & Attractions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2d5f6f;
+            --secondary: #d4a574;
+            --accent: #e8c8a0;
+            --dark: #1a1a1a;
+            --light: #f5f5f5;
+            --bg: #f9f7f4;
+            --white: #ffffff;
+            --success: #4CAF50;
+            --error: #f44336;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, var(--bg) 0%, #f0eae2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* ===== NAVIGATION ===== */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(45, 95, 111, 0.99);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 999;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        nav .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        nav .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: var(--secondary);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .search-box input {
+            padding: 0.7rem 1rem;
+            border: none;
+            border-radius: 6px;
+            width: 250px;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.95);
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.3);
+            width: 300px;
+        }
+
+        .search-box button {
+            padding: 0.7rem 1.2rem;
+            background: var(--secondary);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: var(--dark);
+        }
+
+        .search-box button:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 165, 116, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav .nav-links {
+                display: none;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            padding: 5rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, rgba(45, 95, 111, 0.8) 100%);
+            color: var(--light);
+            animation: slideDown 0.8s ease;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            font-weight: 800;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--secondary);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== FILTER & SORT ===== */
+        .controls {
+            max-width: 1300px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+
+        .filter-group select {
+            padding: 0.7rem 1rem;
+            border: 2px solid var(--secondary);
+            border-radius: 6px;
+            background: var(--white);
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            min-width: 180px;
+        }
+
+        .filter-group select:hover {
+            border-color: var(--primary);
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(45, 95, 111, 0.2);
+        }
+
+        /* ===== ATTRACTIONS GRID ===== */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 2rem 3rem;
+        }
+
+        .attractions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .attraction-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .attraction-card:nth-child(1) { animation-delay: 0.05s; }
+        .attraction-card:nth-child(2) { animation-delay: 0.1s; }
+        .attraction-card:nth-child(3) { animation-delay: 0.15s; }
+        .attraction-card:nth-child(4) { animation-delay: 0.2s; }
+        .attraction-card:nth-child(5) { animation-delay: 0.25s; }
+        .attraction-card:nth-child(6) { animation-delay: 0.3s; }
+        .attraction-card:nth-child(7) { animation-delay: 0.35s; }
+        .attraction-card:nth-child(8) { animation-delay: 0.4s; }
+        .attraction-card:nth-child(9) { animation-delay: 0.45s; }
+        .attraction-card:nth-child(10) { animation-delay: 0.5s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .attraction-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 50px rgba(45, 95, 111, 0.25);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 240px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(45, 95, 111, 0.3) 0%, rgba(212, 165, 116, 0.2) 100%);
+            z-index: 1;
+        }
+
+        .card-image-icon {
+            font-size: 4rem;
+            z-index: 2;
+            position: relative;
+        }
+
+        .card-rank {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+
+        .card-content {
+            padding: 1.8rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .card-category {
+            display: inline-block;
+            background: rgba(45, 95, 111, 0.1);
+            color: var(--primary);
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        .card-distance {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .card-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .card-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 1.2rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .stat-item strong {
+            color: var(--primary);
+        }
+
+        .card-buttons {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1f4450;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(45, 95, 111, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            animation: fadeIn 0.3s;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 12px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            background: var(--primary);
+            color: white;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            color: white;
+        }
+
+        .modal-map-container {
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-map-container iframe {
+            width: 100%;
+            height: 350px;
+            border: none;
+        }
+
+        .modal-info {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .info-section {
+            display: flex;
+            gap: 1.2rem;
+        }
+
+        .info-icon {
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            width: 40px;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-text h4 {
+            color: var(--primary);
+            margin-bottom: 0.4rem;
+            font-size: 1rem;
+        }
+
+        .info-text p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .modal-buttons .btn {
+            flex: 1;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        footer a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .attractions-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .controls {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .filter-group {
+                width: 100%;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .filter-group select {
+                width: 100%;
+            }
+
+            .modal-content {
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .modal.active {
+                padding: 0;
+            }
+
+            .card-buttons {
+                flex-direction: column;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+
+            .modal-map-container iframe {
+                height: 250px;
+            }
+        }
+
+        /* ===== NO RESULTS ===== */
+        .no-results {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #999;
+        }
+
+        .no-results-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ccc;
+        }
+
+        .no-results h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Loading animation */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--primary);
+        }
+
+        .loading i {
+            font-size: 2rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <nav>
+        <a href="#" class="logo">
+            <i class="fas fa-map-location-dot"></i> Kasaragod Explorer Pro
+        </a>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#attractions">Attractions</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search attractions...">
+            <button onclick="searchAttractions()"><i class="fas fa-search"></i></button>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+        <h1>Discover Kasaragod's Top Attractions</h1>
+        <p>Explore the finest tourist destinations in Kerala's northernmost district with real maps and information</p>
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-number">10+</div>
+                <div class="stat-label">Top Attractions</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Within Kasaragod</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">Real</div>
+                <div class="stat-label">Maps & Details</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTROLS -->
+    <div class="controls">
+        <div class="filter-group">
+            <label for="categoryFilter"><i class="fas fa-filter"></i> Category:</label>
+            <select id="categoryFilter" onchange="filterByCategory()">
+                <option value="all">All Categories</option>
+                <option value="Fort">Historic Forts</option>
+                <option value="Temple">Temples</option>
+                <option value="Mosque">Mosques</option>
+                <option value="Hill">Hill Stations</option>
+                <option value="Backwater">Backwaters</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="sortFilter"><i class="fas fa-sort"></i> Sort:</label>
+            <select id="sortFilter" onchange="sortAttractions()">
+                <option value="rank">Popular (Rank)</option>
+                <option value="distance">Distance (Near)</option>
+                <option value="name">Name (A-Z)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+        <div class="attractions-grid" id="attractionsGrid">
+            <!-- Cards will be generated here -->
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle"></h2>
+                <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-image" id="modalImage"></div>
+                <div class="modal-map-container" id="mapContainer"></div>
+                <div class="modal-info">
+                    <div class="info-section">
+                        <div class="info-icon"><i class="fas fa-map-pin"></i></div>
+                        <div class="info-text">
+                            <h4>Location</h4>
+                            <p id="modalLocation"></p>
+                        </div>
+                    </div>
+                    <div class="info-section">
+                        <div class="info-icon"><i class="fas fa-location-dot"></i></div>
+                        <div class="info-text">
+                            <h4>Distance from Kasaragod Town</h4>
+                            <p id="modalDistance"></p>
+                        </div>
+                    </div>
+                    <div class="info-section">
+                        <div class="info-icon"><i class="fas fa-star"></i></div>
+                        <div class="info-text">
+                            <h4>Rating</h4>
+                            <p id="modalRating"></p>
+                        </div>
+                    </div>
+                    <div class="info-section">
+                        <div class="info-icon"><i class="fas fa-info-circle"></i></div>
+                        <div class="info-text">
+                            <h4>About</h4>
+                            <p id="modalDescription"></p>
+                        </div>
+                    </div>
+                    <div class="info-section">
+                        <div class="info-icon"><i class="fas fa-calendar"></i></div>
+                        <div class="info-text">
+                            <h4>Best Time to Visit</h4>
+                            <p id="modalBestTime"></p>
+                        </div>
+                    </div>
+                    <div class="info-section">
+                        <div class="info-icon"><i class="fas fa-clock"></i></div>
+                        <div class="info-text">
+                            <h4>Visiting Hours</h4>
+                            <p id="modalHours"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn btn-primary" onclick="openGoogleMaps()"><i class="fas fa-directions"></i> Get Directions</button>
+                    <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2025 Kasaragod Explorer Pro. All attractions within Kasaragod District, Kerala.</p>
+        <p>Preserving & Promoting Kerala's Rich Cultural Heritage</p>
+    </footer>
+
+    <script>
+        const attractions = [
+            {
+                rank: 1,
+                name: 'Bekal Fort',
+                category: 'Fort',
+                icon: 'fas fa-chess-rook',
+                distance: '15 km',
+                lat: 12.1344,
+                lng: 75.1206,
+                rating: 4.7,
+                image: 'https://images.unsplash.com/photo-1596521217892-31ac61bde0ce?w=800&h=600&fit=crop',
+                description: 'The largest and best-preserved fort in Kerala, built in 1650 by Shivappa Nayak. Situated on a hillock overlooking the Arabian Sea, it offers stunning panoramic views and insights into the region\'s military heritage. The fort features impressive bastions, walls, and observation towers.',
+                location: 'Bekal, Kasaragod',
+                bestTime: 'October to March',
+                hours: '6:00 AM - 6:00 PM',
+                reviews: 2500
+            },
+            {
+                rank: 2,
+                name: 'Chandragiri Fort',
+                category: 'Fort',
+                icon: 'fas fa-gopuram',
+                distance: '8 km',
+                lat: 12.5050,
+                lng: 75.0030,
+                rating: 4.4,
+                image: 'https://images.unsplash.com/photo-1518684195198-a2e9e2f5cef7?w=800&h=600&fit=crop',
+                description: 'An ancient fort on the banks of the Chandragiri River, marking the historic boundary between Kerala and the Tuluva Kingdom. Features impressive architecture, natural surroundings with lush greenery, and a picturesque bridge over the river offering stunning views.',
+                location: 'Chandragiri, Kasaragod',
+                bestTime: 'October to March',
+                hours: '7:00 AM - 5:00 PM',
+                reviews: 1200
+            },
+            {
+                rank: 3,
+                name: 'Ananthapura Lake Temple',
+                category: 'Temple',
+                icon: 'fas fa-gopuram',
+                distance: '25 km',
+                lat: 12.3720,
+                lng: 75.4200,
+                rating: 4.5,
+                image: 'https://images.unsplash.com/photo-1587683074360-1c5bbf8dd83d?w=800&h=600&fit=crop',
+                description: 'A unique temple located on an island in the middle of a serene lake. Dedicated to Lord Anantha Padmanabha, it\'s one of the oldest temples in Kerala. Famous for its unique setting, ancient architecture, and the resident crocodile believed to be a guardian of the temple.',
+                location: 'Ananthapura, Kasaragod',
+                bestTime: 'October to March',
+                hours: '5:30 AM - 8:00 PM',
+                reviews: 1800
+            },
+            {
+                rank: 4,
+                name: 'Mallikarjuna Temple',
+                category: 'Temple',
+                icon: 'fas fa-gopuram',
+                distance: '0.5 km',
+                lat: 12.5100,
+                lng: 75.0300,
+                rating: 4.3,
+                image: 'https://images.unsplash.com/photo-1516527646001-0a72f91cba4a?w=800&h=600&fit=crop',
+                description: 'Located in the heart of Kasaragod town, this ancient temple is dedicated to Lord Shiva. Built by the Iyer Kings, it features outstanding architecture with intricate sculptures and beautiful murals. The temple is known for its annual festival and traditional Yakshagana performances.',
+                location: 'Kasaragod Town Center',
+                bestTime: 'October to March',
+                hours: '6:00 AM - 9:00 PM',
+                reviews: 900
+            },
+            {
+                rank: 5,
+                name: 'Malik Deenar Mosque',
+                category: 'Mosque',
+                icon: 'fas fa-mosque',
+                distance: '0.5 km',
+                lat: 12.5200,
+                lng: 75.0500,
+                rating: 4.2,
+                image: 'https://images.unsplash.com/photo-1596438282551-8a8b8d3b6a8d?w=800&h=600&fit=crop',
+                description: 'A historic mosque near Kasaragod railway station with significant architectural importance. Features beautiful Islamic architecture and is famous for the annual Nercha festival held in November. An important religious and cultural landmark of Kasaragod.',
+                location: 'Kasaragod Railway Station',
+                bestTime: 'October to November',
+                hours: '5:30 AM - 9:00 PM',
+                reviews: 650
+            },
+            {
+                rank: 6,
+                name: 'Valiyaparamba Backwaters',
+                category: 'Backwater',
+                icon: 'fas fa-water',
+                distance: '30 km',
+                lat: 12.2800,
+                lng: 74.9500,
+                rating: 4.4,
+                image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop',
+                description: 'A scenic backwater island separated from the mainland by waterways. Ideal for houseboat cruises through coconut groves, fishing, and experiencing the serene beauty of Kerala\'s waterways. Perfect for photography and nature lovers seeking tranquility.',
+                location: 'Valiyaparamba, Kasaragod',
+                bestTime: 'October to May',
+                hours: '6:00 AM - 6:00 PM',
+                reviews: 1400
+            },
+            {
+                rank: 7,
+                name: 'Kottancheri Hills',
+                category: 'Hill',
+                icon: 'fas fa-mountain',
+                distance: '45 km',
+                lat: 12.1500,
+                lng: 75.5000,
+                rating: 4.4,
+                image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop',
+                description: 'A beautiful rainforest area near Konnakkad offering excellent hiking trails and trekking opportunities. Rich in biodiversity with lush green landscapes, waterfalls, and scenic viewpoints. Perfect for nature enthusiasts and adventure seekers.',
+                location: 'Kottancheri, Northeast Kasaragod',
+                bestTime: 'October to February',
+                hours: '6:00 AM - 5:00 PM',
+                reviews: 800
+            },
+            {
+                rank: 8,
+                name: 'Hosdurg Fort',
+                category: 'Fort',
+                icon: 'fas fa-chess-rook',
+                distance: '40 km',
+                lat: 12.6000,
+                lng: 75.1500,
+                rating: 4.3,
+                image: 'https://images.unsplash.com/photo-1518684195198-a2e9e2f5cef7?w=800&h=600&fit=crop',
+                description: 'An ancient fort with impressive round bastions built by Somashekara Nayak. Features excellent historical architecture and is located near the Nithyanandasram with 45 carved caves. A significant historical monument showcasing ancient engineering.',
+                location: 'Hosdurg, North Kasaragod',
+                bestTime: 'October to March',
+                hours: '7:00 AM - 5:00 PM',
+                reviews: 950
+            },
+            {
+                rank: 9,
+                name: 'Ranipuram Hill Station',
+                category: 'Hill',
+                icon: 'fas fa-mountain',
+                distance: '45 km',
+                lat: 12.0700,
+                lng: 75.4200,
+                rating: 4.5,
+                image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop',
+                description: 'A picturesque hill station at 750m altitude surrounded by lush forests and rolling hills. Home to Ranipuram Wildlife Sanctuary with diverse flora and fauna. Offers excellent trekking trails, scenic viewpoints, and opportunities for nature photography.',
+                location: 'Ranipuram, East Kasaragod',
+                bestTime: 'October to February',
+                hours: '6:00 AM - 5:00 PM',
+                reviews: 1300
+            },
+            {
+                rank: 10,
+                name: 'Mayipady Palace',
+                category: 'Fort',
+                icon: 'fas fa-chess-rook',
+                distance: '15 km',
+                lat: 12.5000,
+                lng: 74.8800,
+                rating: 4.2,
+                image: 'https://images.unsplash.com/photo-1588881557907-3e5b65e370db?w=800&h=600&fit=crop',
+                description: 'An ancient palace of the Kumbala Rajas with significant historical importance dating back centuries. Features impressive traditional architecture and serves as a testament to Kerala\'s royal heritage. An important cultural landmark representing the region\'s aristocratic past.',
+                location: 'Mayipady, West Kasaragod',
+                bestTime: 'October to March',
+                hours: '8:00 AM - 4:00 PM',
+                reviews: 700
+            }
+        ];
+
+        let filteredAttractions = [...attractions];
+        let currentIndex = -1;
+
+        // Render attractions
+        function renderAttractions() {
+            const grid = document.getElementById('attractionsGrid');
+            
+            if (filteredAttractions.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results">
+                        <div class="no-results-icon"><i class="fas fa-search"></i></div>
+                        <h3>No attractions found</h3>
+                        <p>Try adjusting your search or filters</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filteredAttractions.map((attr, idx) => `
+                <div class="attraction-card">
+                    <div class="card-image" style="background-image: url('${attr.image}');">
+                        <div class="card-image-icon"><i class="${attr.icon}"></i></div>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-rank">#${attr.rank} Popular</span>
+                        <h3 class="card-title">${attr.name}</h3>
+                        <span class="card-category">${attr.category}</span>
+                        <div class="card-distance"><i class="fas fa-map-pin"></i> ${attr.distance} from town</div>
+                        <p class="card-description">${attr.description.substring(0, 100)}...</p>
+                        <div class="card-stats">
+                            <div class="stat-item"><i class="fas fa-star"></i> <strong>${attr.rating}</strong>/5.0</div>
+                            <div class="stat-item"><i class="fas fa-comment"></i> <strong>${attr.reviews}</strong> reviews</div>
+                        </div>
+                        <div class="card-buttons">
+                            <button class="btn btn-primary" onclick="openModal(${idx})"><i class="fas fa-eye"></i> Details</button>
+                            <button class="btn btn-secondary" onclick="openGoogleMaps(${attr.lat}, ${attr.lng})"><i class="fas fa-map"></i> Map</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter by category
+        function filterByCategory() {
+            const category = document.getElementById('categoryFilter').value;
+            if (category === 'all') {
+                filteredAttractions = [...attractions];
+            } else {
+                filteredAttractions = attractions.filter(a => a.category === category);
+            }
+            renderAttractions();
+        }
+
+        // Sort attractions
+        function sortAttractions() {
+            const sortBy = document.getElementById('sortFilter').value;
+            if (sortBy === 'rank') {
+                filteredAttractions.sort((a, b) => a.rank - b.rank);
+            } else if (sortBy === 'distance') {
+                filteredAttractions.sort((a, b) => parseInt(a.distance) - parseInt(b.distance));
+            } else if (sortBy === 'name') {
+                filteredAttractions.sort((a, b) => a.name.localeCompare(b.name));
+            }
+            renderAttractions();
+        }
+
+        // Search attractions
+        function searchAttractions() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            filteredAttractions = attractions.filter(a => 
+                a.name.toLowerCase().includes(query) ||
+                a.category.toLowerCase().includes(query) ||
+                a.description.toLowerCase().includes(query) ||
+                a.location.toLowerCase().includes(query)
+            );
+            renderAttractions();
+        }
+
+        // Modal functions
+        function openModal(index) {
+            const attraction = filteredAttractions[index];
+            currentIndex = index;
+            document.getElementById('modalTitle').textContent = attraction.name;
+            document.getElementById('modalImage').style.backgroundImage = `url('${attraction.image}')`;
+            document.getElementById('modalImage').innerHTML = `<i class="${attraction.icon}"></i>`;
+            document.getElementById('modalImage').style.display = 'flex';
+            document.getElementById('modalImage').style.alignItems = 'center';
+            document.getElementById('modalImage').style.justifyContent = 'center';
+            
+            // Embedded Google Map with correct coordinates
+            const mapURL = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3914.2154!2d${attraction.lng}!3d${attraction.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s!2z${attraction.lat},${attraction.lng}!5e0!3m2!1sen!2sin!4v1704878400000`;
+            const mapHTML = `<iframe src="${mapURL}" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+            document.getElementById('mapContainer').innerHTML = mapHTML;
+            
+            document.getElementById('modalLocation').textContent = attraction.location;
+            document.getElementById('modalDistance').textContent = attraction.distance + ' from Kasaragod town';
+            document.getElementById('modalRating').textContent = `${attraction.rating}/5.0 (${attraction.reviews} reviews)`;
+            document.getElementById('modalDescription').textContent = attraction.description;
+            document.getElementById('modalBestTime').textContent = attraction.bestTime;
+            document.getElementById('modalHours').textContent = attraction.hours;
+            
+            document.getElementById('detailModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function openGoogleMaps(lat, lng) {
+            if (lat && lng) {
+                window.open(`https://maps.google.com/?q=${lat},${lng}`, '_blank');
+            } else if (currentIndex >= 0) {
+                const attr = filteredAttractions[currentIndex];
+                window.open(`https://maps.google.com/?q=${attr.lat},${attr.lng}`, '_blank');
+            }
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Search on Enter key
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') searchAttractions();
+        });
+
+        // Initialize
+        renderAttractions();
+    </script>
+</body>
+</html>
